@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["Docker Publish"]
     types: [completed]
     branches: [main]
 
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   release:
-    name: Release
+    name: Create Release
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:

@@ -1,14 +1,16 @@
-name: Build and Publish Docker Image
+name: Docker Publish
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       tag:
         description: "Image tag"
         required: true
-        default: "latest"
+        default: "dev"
 
 env:
   REGISTRY: ghcr.io
@@ -18,13 +20,30 @@ jobs:
   build-and-push:
     name: Build and Push
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       packages: write
-
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is_new_version: ${{ steps.version.outputs.is_new_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get version from pyproject.toml
+        id: version
+        run: |
+          VERSION=$(grep -m1 'version = ' pyproject.toml | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "is_new_version=false" >> $GITHUB_OUTPUT
+          else
+            echo "is_new_version=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -39,20 +58,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            # For versioned releases (v1.0.0): tag as 1.0.0, 1.0, and latest
-            type=semver,pattern={{version}},enable=${{ !github.event.release.prerelease }}
-            type=semver,pattern={{major}}.{{minor}},enable=${{ !github.event.release.prerelease }}
-            type=raw,value=latest,enable=${{ github.event_name == 'release' && !github.event.release.prerelease }}
-            # For dev pre-release: tag as dev only
-            type=raw,value=dev,enable=${{ github.event.release.prerelease }}
-            # For manual dispatch
-            type=raw,value=${{ github.event.inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
+      - name: Determine tags
+        id: tags
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          elif [ "${{ steps.version.outputs.is_new_version }}" == "true" ]; then
+            echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+          else
+            echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev" >> $GITHUB_OUTPUT
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -60,7 +75,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.tags.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
