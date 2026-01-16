@@ -33,6 +33,9 @@ jobs:
       - name: Run ruff formatter check
         run: uv run ruff format --check src/ tests/
 
+      - name: Run black formatter check
+        run: uv run black --check src/ tests/ scripts/
+
   test:
     name: Test
     runs-on: ubuntu-latest

@@ -99,9 +99,7 @@ class CurrentSelection(BaseModel):
 
     language: str = Field(..., description="Language name")
     count: int = Field(..., description="Number of episodes with this selection")
-    is_uniform: bool = Field(
-        ..., description="True if all episodes have the same selection"
-    )
+    is_uniform: bool = Field(..., description="True if all episodes have the same selection")
 
 
 class StreamSummaryResponse(BaseModel):
@@ -335,7 +333,7 @@ async def get_streams(
         500: {"model": ErrorResponse},
     },
     summary="Get stream summary",
-    description="Get aggregated audio/subtitle stream info for all episodes under a show or season.",
+    description="Get aggregated audio/subtitle stream info for all episodes.",
 )
 async def get_stream_summary(
     rating_key: str,
@@ -383,9 +381,7 @@ async def get_stream_summary(
                     token=token,
                     rating_key=rating_key,
                 )
-                episodes.extend(
-                    ep.rating_key for ep in season_episodes if ep.type == "episode"
-                )
+                episodes.extend(ep.rating_key for ep in season_episodes if ep.type == "episode")
 
             else:
                 raise HTTPException(
@@ -448,9 +444,7 @@ async def get_stream_summary(
                 await asyncio.gather(*[get_episode_streams(ep) for ep in batch])
 
             audio_summary = []
-            for (lang, code), count in sorted(
-                audio_counts.items(), key=lambda x: (-x[1], x[0][0])
-            ):
+            for (lang, code), count in sorted(audio_counts.items(), key=lambda x: (-x[1], x[0][0])):
                 sample = audio_samples.get((lang, code))
                 audio_summary.append(
                     LanguageCount(

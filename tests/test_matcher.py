@@ -1,6 +1,5 @@
 """Tests for the stream matching algorithm."""
 
-
 from salsa.backend.models.plex import PlexStream
 from salsa.backend.services.matcher import (
     MatchLevel,

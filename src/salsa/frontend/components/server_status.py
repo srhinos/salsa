@@ -84,7 +84,6 @@ def header_bar() -> rx.Component:
     return rx.hstack(
         rx.hstack(
             mobile_sidebar_drawer(),
-
             rx.hstack(
                 rx.image(
                     src="/icons/salsa_merged.svg",
@@ -110,9 +109,7 @@ def header_bar() -> rx.Component:
             spacing="2",
             align="center",
         ),
-
         rx.spacer(),
-
         rx.hstack(
             rx.box(
                 rx.cond(State.server_connected, server_dropdown()),
@@ -122,7 +119,6 @@ def header_bar() -> rx.Component:
             spacing="3",
             align="center",
         ),
-
         width="100%",
         padding="1em",
         align="center",

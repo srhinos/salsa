@@ -7,8 +7,6 @@ from typing import Any
 import httpx
 from loguru import logger
 
-warnings.filterwarnings("ignore", message="Unverified HTTPS request")
-
 from salsa.backend.config import Settings, get_settings
 from salsa.backend.models.plex import (
     PlexHomeUser,
@@ -20,6 +18,8 @@ from salsa.backend.models.plex import (
     PlexUser,
 )
 from salsa.backend.utils.headers import PLEX_TV_URL, get_plex_headers
+
+warnings.filterwarnings("ignore", message="Unverified HTTPS request")
 
 
 class PlexClientError(Exception):

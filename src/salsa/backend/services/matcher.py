@@ -161,9 +161,7 @@ class StreamMatcher:
                 )
 
             case MatchLevel.TITLE_DISPLAY:
-                return bool(
-                    t_title and t_title == c_title and t_display and t_display == c_display
-                )
+                return bool(t_title and t_title == c_title and t_display and t_display == c_display)
 
             case MatchLevel.TITLE:
                 return bool(t_title and t_title == c_title)

@@ -14,16 +14,13 @@ def login_card() -> rx.Component:
                 width="64px",
                 height="64px",
             ),
-
             rx.heading("SALSA", size="7", weight="bold"),
             rx.text(
                 "Subtitle And Language Stream Automation",
                 size="2",
                 color=rx.color("gray", 11),
             ),
-
             rx.box(height="8px"),
-
             rx.cond(
                 State.error_message != "",
                 rx.callout(
@@ -33,13 +30,11 @@ def login_card() -> rx.Component:
                     size="1",
                 ),
             ),
-
             rx.cond(
                 State.auth_url != "",
                 _pin_auth_section(),
                 _login_options(),
             ),
-
             spacing="4",
             align="center",
             width="100%",
@@ -62,7 +57,6 @@ def _login_options() -> rx.Component:
             on_click=State.create_pin,
             loading=State.is_loading,
         ),
-
         rx.hstack(
             rx.separator(size="4"),
             rx.text("or", size="1", color=rx.color("gray", 10)),
@@ -70,9 +64,7 @@ def _login_options() -> rx.Component:
             align="center",
             width="100%",
         ),
-
         _token_login_form(),
-
         spacing="4",
         width="100%",
     )
@@ -87,14 +79,12 @@ def _pin_auth_section() -> rx.Component:
             spacing="2",
             align="center",
         ),
-
         rx.text(
             "A popup window should have opened. Complete sign in there.",
             size="2",
             color=rx.color("gray", 11),
             text_align="center",
         ),
-
         rx.hstack(
             rx.text("Popup blocked?", size="2", color=rx.color("gray", 11)),
             rx.link(
@@ -106,13 +96,11 @@ def _pin_auth_section() -> rx.Component:
             spacing="1",
             align="center",
         ),
-
         rx.badge(
             f"PIN: {State.pin_code}",
             size="1",
             variant="soft",
         ),
-
         rx.button(
             "Cancel",
             size="2",
@@ -120,7 +108,6 @@ def _pin_auth_section() -> rx.Component:
             color_scheme="gray",
             on_click=State.cancel_pin_auth,
         ),
-
         spacing="4",
         align="center",
     )

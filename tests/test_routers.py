@@ -45,6 +45,7 @@ def settings() -> Settings:
 def mock_user():
     """Create a mock user."""
     from salsa.backend.models.plex import PlexUser
+
     return PlexUser(
         id=1,
         uuid="test-user-uuid",
@@ -75,6 +76,7 @@ def app(settings, mock_session):
     mock_auth_service.get_session.return_value = mock_session
 
     from salsa.backend.services.auth import get_auth_service
+
     application.dependency_overrides[get_auth_service] = lambda: mock_auth_service
 
     return application
@@ -157,13 +159,17 @@ class TestLibrariesRouter:
         """Should filter to video libraries only by default."""
         modified_response = dict(libraries_response)
         modified_response["MediaContainer"] = dict(libraries_response["MediaContainer"])
-        modified_response["MediaContainer"]["Directory"] = libraries_response["MediaContainer"]["Directory"].copy()
-        modified_response["MediaContainer"]["Directory"].append({
-            "key": "3",
-            "title": "Music",
-            "type": "artist",
-            "uuid": "music-uuid",
-        })
+        modified_response["MediaContainer"]["Directory"] = libraries_response["MediaContainer"][
+            "Directory"
+        ].copy()
+        modified_response["MediaContainer"]["Directory"].append(
+            {
+                "key": "3",
+                "title": "Music",
+                "type": "artist",
+                "uuid": "music-uuid",
+            }
+        )
 
         respx.get("http://localhost:32400/library/sections").mock(
             return_value=Response(200, json=modified_response)
@@ -204,7 +210,9 @@ class TestLibrariesRouter:
         assert response.status_code == 404
 
     @respx.mock
-    def test_list_library_items(self, client, auth_headers, libraries_response, library_items_response):
+    def test_list_library_items(
+        self, client, auth_headers, libraries_response, library_items_response
+    ):
         """Should list items in a library."""
         respx.get("http://localhost:32400/library/sections").mock(
             return_value=Response(200, json=libraries_response)
@@ -340,9 +348,7 @@ class TestTracksRouter:
     @respx.mock
     def test_set_audio_track(self, client, auth_headers):
         """Should set audio track for an item."""
-        respx.put("http://localhost:32400/library/parts/60039").mock(
-            return_value=Response(200)
-        )
+        respx.put("http://localhost:32400/library/parts/60039").mock(return_value=Response(200))
 
         response = client.put(
             "/api/tracks/audio",
@@ -376,9 +382,7 @@ class TestTracksRouter:
     @respx.mock
     def test_set_subtitle_track(self, client, auth_headers):
         """Should set subtitle track for an item."""
-        respx.put("http://localhost:32400/library/parts/60039").mock(
-            return_value=Response(200)
-        )
+        respx.put("http://localhost:32400/library/parts/60039").mock(return_value=Response(200))
 
         response = client.put(
             "/api/tracks/subtitle",

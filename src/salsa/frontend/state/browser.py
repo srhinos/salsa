@@ -158,32 +158,40 @@ class BrowserState(AuthState):
         crumbs: list[BreadcrumbItem] = []
 
         if self.selected_library_title:
-            crumbs.append({
-                "key": self.selected_library_key,
-                "title": self.selected_library_title,
-                "level": "library",
-            })
+            crumbs.append(
+                {
+                    "key": self.selected_library_key,
+                    "title": self.selected_library_title,
+                    "level": "library",
+                }
+            )
 
         if self.selected_item_title:
-            crumbs.append({
-                "key": self.selected_item_key,
-                "title": self.selected_item_title,
-                "level": "item",
-            })
+            crumbs.append(
+                {
+                    "key": self.selected_item_key,
+                    "title": self.selected_item_title,
+                    "level": "item",
+                }
+            )
 
         if self.selected_season_title:
-            crumbs.append({
-                "key": self.selected_season_key,
-                "title": self.selected_season_title,
-                "level": "season",
-            })
+            crumbs.append(
+                {
+                    "key": self.selected_season_key,
+                    "title": self.selected_season_title,
+                    "level": "season",
+                }
+            )
 
         if self.selected_episode_title:
-            crumbs.append({
-                "key": self.selected_episode_key,
-                "title": self.selected_episode_title,
-                "level": "episode",
-            })
+            crumbs.append(
+                {
+                    "key": self.selected_episode_key,
+                    "title": self.selected_episode_title,
+                    "level": "episode",
+                }
+            )
 
         return crumbs
 
@@ -295,9 +303,9 @@ class BrowserState(AuthState):
             return self.items
         search = self.item_filter.lower()
         return [
-            i for i in self.items
-            if search in i.get("title", "").lower()
-            or search in str(i.get("year", ""))
+            i
+            for i in self.items
+            if search in i.get("title", "").lower() or search in str(i.get("year", ""))
         ]
 
     @rx.var
@@ -306,10 +314,7 @@ class BrowserState(AuthState):
         if not self.season_filter:
             return self.seasons
         search = self.season_filter.lower()
-        return [
-            s for s in self.seasons
-            if search in s.get("title", "").lower()
-        ]
+        return [s for s in self.seasons if search in s.get("title", "").lower()]
 
     @rx.var
     def filtered_episodes(self) -> list[MediaItem]:
@@ -318,9 +323,9 @@ class BrowserState(AuthState):
             return self.episodes
         search = self.episode_filter.lower()
         return [
-            e for e in self.episodes
-            if search in e.get("title", "").lower()
-            or search in str(e.get("index", ""))
+            e
+            for e in self.episodes
+            if search in e.get("title", "").lower() or search in str(e.get("index", ""))
         ]
 
     @rx.event
@@ -395,10 +400,7 @@ class BrowserState(AuthState):
 
         try:
             result = await api.get_children(self.token, show_key)
-            self.seasons = [
-                c for c in result.get("children", [])
-                if c.get("type") == "season"
-            ]
+            self.seasons = [c for c in result.get("children", []) if c.get("type") == "season"]
         except APIError as e:
             self.browser_error = f"Failed to load seasons: {e.message}"
         finally:
@@ -429,10 +431,7 @@ class BrowserState(AuthState):
 
         try:
             result = await api.get_children(self.token, season_key)
-            self.episodes = [
-                c for c in result.get("children", [])
-                if c.get("type") == "episode"
-            ]
+            self.episodes = [c for c in result.get("children", []) if c.get("type") == "episode"]
         except APIError as e:
             self.browser_error = f"Failed to load episodes: {e.message}"
         finally:

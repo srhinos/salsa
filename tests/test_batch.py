@@ -136,8 +136,7 @@ class TestBatchOperation:
 
         op = BatchOperation(batch_id="test-1")
         op.results = [
-            ItemResult(rating_key=str(i), title=f"Item {i}", success=True)
-            for i in range(1500)
+            ItemResult(rating_key=str(i), title=f"Item {i}", success=True) for i in range(1500)
         ]
 
         summary = op.to_summary()
@@ -261,19 +260,23 @@ def create_plex_item_from_fixture(metadata_dict: dict) -> PlexMediaItem:
                     if "Stream" in part_data:
                         for s in part_data["Stream"]:
                             streams.append(create_plex_stream(s))
-                    parts.append(PlexPart(
-                        id=part_data["id"],
-                        key=part_data.get("key", ""),
-                        file=part_data.get("file"),
-                        streams=streams,
-                    ))
-            media_list.append(PlexMedia(
-                id=media_data["id"],
-                duration=media_data.get("duration"),
-                bitrate=media_data.get("bitrate"),
-                container=media_data.get("container"),
-                parts=parts,
-            ))
+                    parts.append(
+                        PlexPart(
+                            id=part_data["id"],
+                            key=part_data.get("key", ""),
+                            file=part_data.get("file"),
+                            streams=streams,
+                        )
+                    )
+            media_list.append(
+                PlexMedia(
+                    id=media_data["id"],
+                    duration=media_data.get("duration"),
+                    bitrate=media_data.get("bitrate"),
+                    container=media_data.get("container"),
+                    parts=parts,
+                )
+            )
 
     return PlexMediaItem(
         rating_key=item_data["ratingKey"],
@@ -295,16 +298,18 @@ def create_episode_items_from_fixture(fixture_dict: dict) -> list[PlexMediaItem]
     """Create episode items from episodes fixture (without streams)."""
     items = []
     for item_data in fixture_dict["MediaContainer"].get("Metadata", []):
-        items.append(PlexMediaItem(
-            rating_key=item_data["ratingKey"],
-            key=item_data["key"],
-            type=item_data["type"],
-            title=item_data["title"],
-            index=item_data.get("index"),
-            parent_index=item_data.get("parentIndex"),
-            parent_title=item_data.get("parentTitle"),
-            grandparent_title=item_data.get("grandparentTitle"),
-        ))
+        items.append(
+            PlexMediaItem(
+                rating_key=item_data["ratingKey"],
+                key=item_data["key"],
+                type=item_data["type"],
+                title=item_data["title"],
+                index=item_data.get("index"),
+                parent_index=item_data.get("parentIndex"),
+                parent_title=item_data.get("parentTitle"),
+                grandparent_title=item_data.get("grandparentTitle"),
+            )
+        )
     return items
 
 
@@ -312,15 +317,17 @@ def create_season_items_from_fixture(fixture_dict: dict) -> list[PlexMediaItem]:
     """Create season items from seasons fixture."""
     items = []
     for item_data in fixture_dict["MediaContainer"].get("Metadata", []):
-        items.append(PlexMediaItem(
-            rating_key=item_data["ratingKey"],
-            key=item_data["key"],
-            type=item_data["type"],
-            title=item_data["title"],
-            index=item_data.get("index"),
-            parent_index=item_data.get("parentIndex"),
-            parent_title=item_data.get("parentTitle"),
-        ))
+        items.append(
+            PlexMediaItem(
+                rating_key=item_data["ratingKey"],
+                key=item_data["key"],
+                type=item_data["type"],
+                title=item_data["title"],
+                index=item_data.get("index"),
+                parent_index=item_data.get("parentIndex"),
+                parent_title=item_data.get("parentTitle"),
+            )
+        )
     return items
 
 
@@ -422,11 +429,13 @@ class TestBatchServiceIntegration:
         service = BatchService(settings=settings, batch_store=store)
 
         mock_client = MagicMock()
-        mock_client.get_children = AsyncMock(side_effect=[
-            seasons,
-            episodes,
-            episodes,
-        ])
+        mock_client.get_children = AsyncMock(
+            side_effect=[
+                seasons,
+                episodes,
+                episodes,
+            ]
+        )
 
         items = await service._get_items_for_scope(
             client=mock_client,
@@ -509,6 +518,7 @@ class TestBatchServiceProcessItem:
         mock_client.set_audio_stream = AsyncMock()
 
         from salsa.backend.services.matcher import StreamMatcher
+
         matcher = StreamMatcher()
 
         result = await service._process_item(
@@ -538,6 +548,7 @@ class TestBatchServiceProcessItem:
         mock_client.set_subtitle_stream = AsyncMock()
 
         from salsa.backend.services.matcher import StreamMatcher
+
         matcher = StreamMatcher()
 
         result = await service._process_item(
@@ -577,6 +588,7 @@ class TestBatchServiceProcessItem:
         mock_client.get_metadata = AsyncMock(return_value=item_no_part)
 
         from salsa.backend.services.matcher import StreamMatcher
+
         matcher = StreamMatcher()
 
         result = await service._process_item(

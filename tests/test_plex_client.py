@@ -167,7 +167,9 @@ class TestPinAuthentication:
 
     @pytest.mark.asyncio
     @respx.mock
-    async def test_create_pin_sends_strong_as_query_param(self, settings: Settings, mock_pin_response: dict):
+    async def test_create_pin_sends_strong_as_query_param(
+        self, settings: Settings, mock_pin_response: dict
+    ):
         """Verify strong=true is sent as query param, not header."""
         route = respx.post("https://plex.tv/api/v2/pins").mock(
             return_value=Response(200, json=mock_pin_response)
@@ -202,7 +204,9 @@ class TestPinAuthentication:
 
     @pytest.mark.asyncio
     @respx.mock
-    async def test_check_pin_sends_code_as_query_param(self, settings: Settings, mock_pin_response: dict):
+    async def test_check_pin_sends_code_as_query_param(
+        self, settings: Settings, mock_pin_response: dict
+    ):
         """Verify code is sent as query param, not header."""
         route = respx.get("https://plex.tv/api/v2/pins/12345").mock(
             return_value=Response(200, json=mock_pin_response)

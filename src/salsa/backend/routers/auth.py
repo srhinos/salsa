@@ -248,6 +248,7 @@ async def get_home_users(
 
         users_data = await auth_service.get_home_users(token)
         from salsa.backend.models.plex import PlexHomeUser
+
         users = [PlexHomeUser.model_validate(u) for u in users_data]
 
         return HomeUsersResponse(users=users, current_user_uuid=current_uuid)

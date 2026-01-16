@@ -9,15 +9,14 @@ import pytest
 # =============================================================================
 # =============================================================================
 
+
 def filter_items(items: list[dict], search: str) -> list[dict]:
     """Filter items by title or year - mirrors BrowserState.filtered_items logic."""
     if not search:
         return items
     search = search.lower()
     return [
-        i for i in items
-        if search in i.get("title", "").lower()
-        or search in str(i.get("year", ""))
+        i for i in items if search in i.get("title", "").lower() or search in str(i.get("year", ""))
     ]
 
 
@@ -26,10 +25,7 @@ def filter_seasons(seasons: list[dict], search: str) -> list[dict]:
     if not search:
         return seasons
     search = search.lower()
-    return [
-        s for s in seasons
-        if search in s.get("title", "").lower()
-    ]
+    return [s for s in seasons if search in s.get("title", "").lower()]
 
 
 def filter_episodes(episodes: list[dict], search: str) -> list[dict]:
@@ -38,9 +34,9 @@ def filter_episodes(episodes: list[dict], search: str) -> list[dict]:
         return episodes
     search = search.lower()
     return [
-        e for e in episodes
-        if search in e.get("title", "").lower()
-        or search in str(e.get("index", ""))
+        e
+        for e in episodes
+        if search in e.get("title", "").lower() or search in str(e.get("index", ""))
     ]
 
 
@@ -187,32 +183,40 @@ def generate_breadcrumbs(
     crumbs = []
 
     if library_title:
-        crumbs.append({
-            "key": library_key,
-            "title": library_title,
-            "level": "library",
-        })
+        crumbs.append(
+            {
+                "key": library_key,
+                "title": library_title,
+                "level": "library",
+            }
+        )
 
     if item_title:
-        crumbs.append({
-            "key": item_key,
-            "title": item_title,
-            "level": "item",
-        })
+        crumbs.append(
+            {
+                "key": item_key,
+                "title": item_title,
+                "level": "item",
+            }
+        )
 
     if season_title:
-        crumbs.append({
-            "key": season_key,
-            "title": season_title,
-            "level": "season",
-        })
+        crumbs.append(
+            {
+                "key": season_key,
+                "title": season_title,
+                "level": "season",
+            }
+        )
 
     if episode_title:
-        crumbs.append({
-            "key": episode_key,
-            "title": episode_title,
-            "level": "episode",
-        })
+        crumbs.append(
+            {
+                "key": episode_key,
+                "title": episode_title,
+                "level": "episode",
+            }
+        )
 
     return crumbs
 

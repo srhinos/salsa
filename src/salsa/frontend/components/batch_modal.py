@@ -24,7 +24,6 @@ def batch_modal() -> rx.Component:
                 "Apply the current track selection to multiple items.",
                 size="2",
             ),
-
             rx.cond(
                 State.is_batch_running,
                 _batch_progress(),
@@ -34,7 +33,6 @@ def batch_modal() -> rx.Component:
                     _batch_form(),
                 ),
             ),
-
             max_width="500px",
         ),
         open=State.show_batch_modal,
@@ -58,7 +56,6 @@ def _batch_form() -> rx.Component:
                 size="1",
             ),
         ),
-
         rx.vstack(
             rx.text("Apply to:", size="2", weight="medium"),
             rx.select.root(
@@ -78,7 +75,6 @@ def _batch_form() -> rx.Component:
             spacing="1",
             width="100%",
         ),
-
         rx.vstack(
             rx.text("Keyword filter (optional):", size="2", weight="medium"),
             rx.input(
@@ -95,7 +91,6 @@ def _batch_form() -> rx.Component:
             spacing="1",
             width="100%",
         ),
-
         rx.cond(
             State.batch_stream_type == "subtitle",
             rx.hstack(
@@ -107,7 +102,6 @@ def _batch_form() -> rx.Component:
                 spacing="2",
             ),
         ),
-
         rx.card(
             rx.vstack(
                 rx.text("Source stream:", size="2", weight="medium"),
@@ -140,7 +134,6 @@ def _batch_form() -> rx.Component:
             size="1",
             variant="surface",
         ),
-
         rx.hstack(
             rx.dialog.close(
                 rx.button("Cancel", variant="soft", color_scheme="gray"),
@@ -154,7 +147,6 @@ def _batch_form() -> rx.Component:
             justify="end",
             width="100%",
         ),
-
         spacing="4",
         width="100%",
         padding_top="4",
@@ -165,20 +157,17 @@ def _batch_progress() -> rx.Component:
     """Batch operation progress display."""
     return rx.vstack(
         rx.text(State.batch_message, size="2"),
-
         rx.progress(
             value=State.batch_progress_percent,
             max=100,
             width="100%",
         ),
-
         rx.hstack(
             rx.text(f"{State.batch_processed} / {State.batch_total}", size="2"),
             rx.spacer(),
             rx.text(f"{State.batch_progress_percent}%", size="2", weight="medium"),
             width="100%",
         ),
-
         rx.cond(
             State.batch_current_item != "",
             rx.text(
@@ -188,14 +177,12 @@ def _batch_progress() -> rx.Component:
                 truncate=True,
             ),
         ),
-
         rx.hstack(
             rx.badge(f"{State.batch_success} updated", color_scheme="green", size="1"),
             rx.badge(f"{State.batch_skipped} skipped", color_scheme="gray", size="1"),
             rx.badge(f"{State.batch_failed} failed", color_scheme="red", size="1"),
             spacing="2",
         ),
-
         spacing="3",
         width="100%",
         padding_y="4",
@@ -218,7 +205,6 @@ def _batch_results() -> rx.Component:
                 color="red",
             ),
         ),
-
         rx.cond(
             State.batch_failed > 0,
             rx.accordion.root(
@@ -232,7 +218,11 @@ def _batch_results() -> rx.Component:
                                     ~r["success"],
                                     rx.hstack(
                                         rx.text(r["title"], size="1", truncate=True),
-                                        rx.text(rx.cond(r["error"], r["error"], "Unknown error"), size="1", color_scheme="red"),
+                                        rx.text(
+                                            rx.cond(r["error"], r["error"], "Unknown error"),
+                                            size="1",
+                                            color_scheme="red",
+                                        ),
                                         spacing="2",
                                         width="100%",
                                     ),
@@ -248,7 +238,6 @@ def _batch_results() -> rx.Component:
                 collapsible=True,
             ),
         ),
-
         rx.hstack(
             rx.dialog.close(
                 rx.button("Close", variant="soft"),
@@ -256,7 +245,6 @@ def _batch_results() -> rx.Component:
             justify="end",
             width="100%",
         ),
-
         spacing="4",
         width="100%",
         padding_y="4",

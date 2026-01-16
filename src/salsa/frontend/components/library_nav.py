@@ -5,10 +5,10 @@ import reflex as rx
 from salsa.frontend import styles
 from salsa.frontend.state import State
 
-
 # =============================================================================
 # LIBRARY SELECTOR - Simple tab-like pills
 # =============================================================================
+
 
 def _library_pill(lib: dict) -> rx.Component:
     """Library selection pill - matches template sidebar_item pattern."""
@@ -37,7 +37,9 @@ def _library_pill(lib: dict) -> rx.Component:
         background=rx.cond(is_selected, styles.accent_bg_color, "transparent"),
         style={
             "_hover": {
-                "background_color": rx.cond(is_selected, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_selected, styles.accent_bg_color, styles.gray_bg_color
+                ),
             },
         },
         on_click=lambda: State.select_library(lib["key"]),
@@ -47,6 +49,7 @@ def _library_pill(lib: dict) -> rx.Component:
 # =============================================================================
 # BREADCRUMB HEADER - Shows current selection with back
 # =============================================================================
+
 
 def _breadcrumb_header(
     title: rx.Var,
@@ -126,6 +129,7 @@ def _breadcrumb_header(
 # SEARCH INPUT - Simple ghost style
 # =============================================================================
 
+
 def _search_input(placeholder: str, value: rx.Var, on_change: callable) -> rx.Component:
     """Simple search input - no clear button, user can select all and delete."""
     return rx.hstack(
@@ -158,6 +162,7 @@ def _search_input(placeholder: str, value: rx.Var, on_change: callable) -> rx.Co
 # LIST ITEMS - Matching template sidebar_item exactly
 # =============================================================================
 
+
 def _list_item(
     title: rx.Var,
     is_selected: rx.Var,
@@ -188,7 +193,9 @@ def _list_item(
         background=rx.cond(is_selected, styles.accent_bg_color, "transparent"),
         style={
             "_hover": {
-                "background_color": rx.cond(is_selected, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_selected, styles.accent_bg_color, styles.gray_bg_color
+                ),
                 "color": rx.cond(is_selected, styles.accent_text_color, styles.text_color),
             },
         },
@@ -247,7 +254,9 @@ def _season_item(season: dict) -> rx.Component:
         background=rx.cond(is_selected, styles.accent_bg_color, "transparent"),
         style={
             "_hover": {
-                "background_color": rx.cond(is_selected, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_selected, styles.accent_bg_color, styles.gray_bg_color
+                ),
             },
         },
         on_click=lambda: State.select_season(season["rating_key"]),
@@ -285,7 +294,9 @@ def _episode_item(episode: dict) -> rx.Component:
         background=rx.cond(is_selected, styles.accent_bg_color, "transparent"),
         style={
             "_hover": {
-                "background_color": rx.cond(is_selected, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_selected, styles.accent_bg_color, styles.gray_bg_color
+                ),
             },
         },
         on_click=lambda: State.select_episode(episode["rating_key"]),
@@ -295,6 +306,7 @@ def _episode_item(episode: dict) -> rx.Component:
 # =============================================================================
 # SECTION LABEL - Simple with count badge
 # =============================================================================
+
 
 def _section_label(text: str, count: rx.Var | None = None) -> rx.Component:
     """Section label matching template pattern."""
@@ -324,6 +336,7 @@ def _section_label(text: str, count: rx.Var | None = None) -> rx.Component:
 # MAIN NAVIGATION SIDEBAR
 # =============================================================================
 
+
 def navigation_sidebar() -> rx.Component:
     """Drill-down navigation sidebar - template pattern."""
     return rx.vstack(
@@ -340,12 +353,10 @@ def navigation_sidebar() -> rx.Component:
             width="100%",
             padding="1em",
         ),
-
         rx.cond(
             State.selected_library_key != "",
             rx.separator(size="4"),
         ),
-
         rx.cond(
             State.selected_library_key != "",
             rx.cond(
@@ -367,7 +378,9 @@ def navigation_sidebar() -> rx.Component:
                             State.is_loading_items,
                             rx.center(rx.spinner(size="2"), padding="4"),
                             rx.fragment(
-                                _search_input("Search...", State.item_filter, State.set_item_filter),
+                                _search_input(
+                                    "Search...", State.item_filter, State.set_item_filter
+                                ),
                                 rx.scroll_area(
                                     rx.vstack(
                                         rx.foreach(State.filtered_items, _show_item),
@@ -394,7 +407,6 @@ def navigation_sidebar() -> rx.Component:
                 ),
             ),
         ),
-
         rx.cond(
             (State.selected_item_type == "show") & (State.selected_item_key != ""),
             rx.cond(
@@ -427,7 +439,6 @@ def navigation_sidebar() -> rx.Component:
                 ),
             ),
         ),
-
         rx.cond(
             State.selected_season_key != "",
             rx.box(
@@ -437,7 +448,9 @@ def navigation_sidebar() -> rx.Component:
                         State.is_loading_episodes,
                         rx.center(rx.spinner(size="2"), padding="3"),
                         rx.fragment(
-                            _search_input("Search...", State.episode_filter, State.set_episode_filter),
+                            _search_input(
+                                "Search...", State.episode_filter, State.set_episode_filter
+                            ),
                             rx.scroll_area(
                                 rx.vstack(
                                     rx.foreach(State.filtered_episodes, _episode_item),
@@ -463,7 +476,6 @@ def navigation_sidebar() -> rx.Component:
                 min_height="0",
             ),
         ),
-
         rx.cond(
             State.browser_error != "",
             rx.box(
@@ -476,7 +488,6 @@ def navigation_sidebar() -> rx.Component:
                 padding="1em",
             ),
         ),
-
         spacing="0",
         width="100%",
         height="100%",
@@ -487,6 +498,7 @@ def navigation_sidebar() -> rx.Component:
 # =============================================================================
 # MOBILE DRAWER - Using rx.drawer (template pattern)
 # =============================================================================
+
 
 def mobile_sidebar_drawer() -> rx.Component:
     """Mobile drawer using rx.drawer - template pattern."""

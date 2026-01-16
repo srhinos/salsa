@@ -133,9 +133,7 @@ class BatchService:
                 seasons = await client.get_children(server_url, token, target_key)
                 for season in seasons:
                     if season.is_season:
-                        episodes = await client.get_children(
-                            server_url, token, season.rating_key
-                        )
+                        episodes = await client.get_children(server_url, token, season.rating_key)
                         items.extend([e for e in episodes if e.is_episode])
 
             case BatchScope.LIBRARY:
@@ -144,9 +142,7 @@ class BatchService:
                     if item.is_movie:
                         items.append(item)
                     elif item.is_show:
-                        seasons = await client.get_children(
-                            server_url, token, item.rating_key
-                        )
+                        seasons = await client.get_children(server_url, token, item.rating_key)
                         for season in seasons:
                             if season.is_season:
                                 episodes = await client.get_children(
@@ -191,7 +187,9 @@ class BatchService:
         Returns the batch ID for tracking progress.
         """
         batch_id = str(uuid.uuid4())[:8]
-        logger.info(f"BATCH {batch_id} created: server={server_url}, scope={scope}, target={target_key}, stream_type={stream_type}")
+        logger.info(
+            f"BATCH {batch_id} created: scope={scope}, target={target_key}, type={stream_type}"
+        )
         operation = self.batch_store.create(batch_id)
         operation.start_time = time.time()
         operation.status = BatchStatus.RUNNING
@@ -229,7 +227,7 @@ class BatchService:
         set_none: bool,
     ) -> None:
         """Execute the batch operation."""
-        logger.info(f"BATCH {batch_id} starting: server_url={server_url}, scope={scope}, target_key={target_key}")
+        logger.info(f"BATCH {batch_id} starting: scope={scope}, target={target_key}")
 
         operation = self.batch_store.get(batch_id)
         if not operation:
@@ -250,11 +248,15 @@ class BatchService:
                     return
 
                 logger.debug(f"BATCH {batch_id} fetching source metadata from {server_url}")
-                source_item = await client.get_metadata(
-                    server_url,
-                    token,
-                    source_key or "",
-                ) if source_key else None
+                source_item = (
+                    await client.get_metadata(
+                        server_url,
+                        token,
+                        source_key or "",
+                    )
+                    if source_key
+                    else None
+                )
                 logger.debug(f"BATCH {batch_id} source_item={source_item is not None}")
 
                 source_stream: PlexStream | None = None
@@ -333,7 +335,10 @@ class BatchService:
         finally:
             operation.end_time = time.time()
             operation.current_item = None
-            logger.info(f"BATCH {batch_id} finished: status={operation.status}, success={operation.success}, skipped={operation.skipped}, failed={operation.failed}")
+            logger.info(
+                f"BATCH {batch_id} done: {operation.status} "
+                f"(ok={operation.success}, skip={operation.skipped}, fail={operation.failed})"
+            )
 
     async def _process_item(
         self,
@@ -366,9 +371,7 @@ class BatchService:
 
             part = full_item.first_part
             candidates = (
-                part.audio_streams
-                if stream_type == StreamType.AUDIO
-                else part.subtitle_streams
+                part.audio_streams if stream_type == StreamType.AUDIO else part.subtitle_streams
             )
 
             if set_none and stream_type == StreamType.SUBTITLE:

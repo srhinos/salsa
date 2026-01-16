@@ -6,10 +6,10 @@ from salsa.frontend import styles
 from salsa.frontend.state import State
 from salsa.frontend.state.browser import StreamItem
 
-
 # =============================================================================
 # MAIN TRACK PANEL
 # =============================================================================
+
 
 def track_panel() -> rx.Component:
     """Main panel showing audio and subtitle tracks."""
@@ -60,6 +60,7 @@ def _empty_state() -> rx.Component:
 # EPISODE TRACK PANEL
 # =============================================================================
 
+
 def _episode_track_panel() -> rx.Component:
     """Track panel for individual episode/movie."""
     return rx.vstack(
@@ -84,11 +85,8 @@ def _episode_track_panel() -> rx.Component:
             border_radius=styles.border_radius,
             width="100%",
         ),
-
         audio_track_section(),
-
         subtitle_track_section(),
-
         spacing="4",
         width="100%",
     )
@@ -97,6 +95,7 @@ def _episode_track_panel() -> rx.Component:
 # =============================================================================
 # SHOW/SEASON SUMMARY PANEL
 # =============================================================================
+
 
 def _show_season_summary_panel() -> rx.Component:
     """Summary panel for show or season level with batch selectors."""
@@ -128,7 +127,6 @@ def _show_season_summary_panel() -> rx.Component:
             size="3",
             width="100%",
         ),
-
         rx.cond(
             State.is_batch_running,
             rx.card(
@@ -163,7 +161,6 @@ def _show_season_summary_panel() -> rx.Component:
                 size="2",
             ),
         ),
-
         rx.cond(
             State.is_loading_summary,
             rx.center(
@@ -185,11 +182,8 @@ def _show_season_summary_panel() -> rx.Component:
                         ),
                         spacing="2",
                     ),
-
                     _audio_selector_card(),
-
                     _subtitle_selector_card(),
-
                     spacing="4",
                     width="100%",
                 ),
@@ -199,7 +193,6 @@ def _show_season_summary_panel() -> rx.Component:
                 ),
             ),
         ),
-
         spacing="5",
         width="100%",
     )
@@ -208,6 +201,7 @@ def _show_season_summary_panel() -> rx.Component:
 # =============================================================================
 # AUDIO SELECTOR CARD
 # =============================================================================
+
 
 def _current_audio_indicator() -> rx.Component:
     """Current audio selection badge."""
@@ -236,11 +230,8 @@ def _audio_selector_card() -> rx.Component:
                 spacing="2",
                 align="center",
             ),
-
             rx.separator(size="4"),
-
             _current_audio_indicator(),
-
             rx.box(
                 rx.foreach(
                     State.stream_summary["audio_summary"],
@@ -251,7 +242,6 @@ def _audio_selector_card() -> rx.Component:
                 gap="3",
                 width="100%",
             ),
-
             spacing="4",
             width="100%",
         ),
@@ -292,7 +282,9 @@ def _audio_language_button(item: dict) -> rx.Component:
         border=rx.cond(is_current, f"1px solid {styles.accent_text_color}", styles.border),
         style={
             "_hover": {
-                "background_color": rx.cond(is_current, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_current, styles.accent_bg_color, styles.gray_bg_color
+                ),
             },
         },
         pointer_events=rx.cond(State.is_batch_running, "none", "auto"),
@@ -307,6 +299,7 @@ def _audio_language_button(item: dict) -> rx.Component:
 # =============================================================================
 # SUBTITLE SELECTOR CARD
 # =============================================================================
+
 
 def _current_subtitle_indicator() -> rx.Component:
     """Current subtitle selection badge."""
@@ -354,11 +347,8 @@ def _subtitle_selector_card() -> rx.Component:
                 align="center",
                 width="100%",
             ),
-
             rx.separator(size="4"),
-
             _current_subtitle_indicator(),
-
             rx.box(
                 rx.foreach(
                     State.stream_summary["subtitle_summary"],
@@ -369,7 +359,6 @@ def _subtitle_selector_card() -> rx.Component:
                 gap="3",
                 width="100%",
             ),
-
             spacing="4",
             width="100%",
         ),
@@ -410,7 +399,9 @@ def _subtitle_language_button(item: dict) -> rx.Component:
         border=rx.cond(is_current, f"1px solid {styles.accent_text_color}", styles.border),
         style={
             "_hover": {
-                "background_color": rx.cond(is_current, styles.accent_bg_color, styles.gray_bg_color),
+                "background_color": rx.cond(
+                    is_current, styles.accent_bg_color, styles.gray_bg_color
+                ),
             },
         },
         pointer_events=rx.cond(State.is_batch_running, "none", "auto"),
@@ -425,6 +416,7 @@ def _subtitle_language_button(item: dict) -> rx.Component:
 # =============================================================================
 # AUDIO TRACK SECTION (TABLE)
 # =============================================================================
+
 
 def audio_track_section() -> rx.Component:
     """Audio tracks table section."""
@@ -520,6 +512,7 @@ def _audio_row(stream: StreamItem) -> rx.Component:
 # =============================================================================
 # SUBTITLE TRACK SECTION (TABLE)
 # =============================================================================
+
 
 def subtitle_track_section() -> rx.Component:
     """Subtitle tracks table section."""

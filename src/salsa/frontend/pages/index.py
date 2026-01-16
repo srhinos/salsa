@@ -53,7 +53,6 @@ def _main_layout() -> rx.Component:
     """Layout for authenticated users - template pattern."""
     return rx.flex(
         header_bar(),
-
         rx.flex(
             rx.box(
                 navigation_sidebar(),
@@ -64,7 +63,6 @@ def _main_layout() -> rx.Component:
                 border_right=styles.border,
                 display=["none", "none", "flex"],
             ),
-
             rx.box(
                 track_panel(),
                 flex="1",
@@ -72,13 +70,10 @@ def _main_layout() -> rx.Component:
                 overflow_y="auto",
                 height="calc(100dvh - 60px)",
             ),
-
             width="100%",
             flex="1",
         ),
-
         batch_modal(),
-
         direction="column",
         width="100%",
         height="100dvh",

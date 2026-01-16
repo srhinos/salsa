@@ -69,9 +69,7 @@ class APIClient:
 
     async def check_pin(self, pin_id: int, code: str) -> dict[str, Any]:
         """Check if a PIN has been authenticated."""
-        return await self._request(
-            "GET", f"/api/auth/pin/{pin_id}", params={"code": code}
-        )
+        return await self._request("GET", f"/api/auth/pin/{pin_id}", params={"code": code})
 
     async def complete_pin(self, pin_id: int, code: str) -> dict[str, Any]:
         """Complete PIN authentication and create session."""
@@ -81,9 +79,7 @@ class APIClient:
 
     async def login_with_token(self, token: str) -> dict[str, Any]:
         """Login with an existing Plex token."""
-        return await self._request(
-            "POST", "/api/auth/token", json={"token": token}
-        )
+        return await self._request("POST", "/api/auth/token", json={"token": token})
 
     async def get_session(self, token: str) -> dict[str, Any]:
         """Get current session info."""
@@ -133,9 +129,7 @@ class APIClient:
 
     async def test_connection(self, token: str, url: str) -> dict[str, Any]:
         """Test if a server URL is reachable."""
-        return await self._request(
-            "POST", "/api/server/test", token=token, json={"url": url}
-        )
+        return await self._request("POST", "/api/server/test", token=token, json={"url": url})
 
     # =========================================================================
     # =========================================================================
@@ -150,9 +144,7 @@ class APIClient:
 
     async def get_library_items(self, token: str, library_key: str) -> dict[str, Any]:
         """Get items in a library."""
-        return await self._request(
-            "GET", f"/api/libraries/{library_key}/items", token=token
-        )
+        return await self._request("GET", f"/api/libraries/{library_key}/items", token=token)
 
     # =========================================================================
     # =========================================================================
@@ -163,28 +155,20 @@ class APIClient:
 
     async def get_children(self, token: str, rating_key: str) -> dict[str, Any]:
         """Get children of a media item (seasons/episodes)."""
-        return await self._request(
-            "GET", f"/api/media/{rating_key}/children", token=token
-        )
+        return await self._request("GET", f"/api/media/{rating_key}/children", token=token)
 
     async def get_streams(self, token: str, rating_key: str) -> dict[str, Any]:
         """Get audio/subtitle streams for a media item."""
-        return await self._request(
-            "GET", f"/api/media/{rating_key}/streams", token=token
-        )
+        return await self._request("GET", f"/api/media/{rating_key}/streams", token=token)
 
     async def get_stream_summary(self, token: str, rating_key: str) -> dict[str, Any]:
         """Get aggregated stream summary for a show or season."""
-        return await self._request(
-            "GET", f"/api/media/{rating_key}/stream-summary", token=token
-        )
+        return await self._request("GET", f"/api/media/{rating_key}/stream-summary", token=token)
 
     # =========================================================================
     # =========================================================================
 
-    async def set_audio_track(
-        self, token: str, part_id: int, stream_id: int
-    ) -> dict[str, Any]:
+    async def set_audio_track(self, token: str, part_id: int, stream_id: int) -> dict[str, Any]:
         """Set audio track for a media item."""
         return await self._request(
             "PUT",
@@ -193,9 +177,7 @@ class APIClient:
             json={"part_id": part_id, "stream_id": stream_id, "stream_type": "audio"},
         )
 
-    async def set_subtitle_track(
-        self, token: str, part_id: int, stream_id: int
-    ) -> dict[str, Any]:
+    async def set_subtitle_track(self, token: str, part_id: int, stream_id: int) -> dict[str, Any]:
         """Set subtitle track for a media item (0 to disable)."""
         return await self._request(
             "PUT",
@@ -231,15 +213,11 @@ class APIClient:
 
     async def get_batch_progress(self, token: str, batch_id: str) -> dict[str, Any]:
         """Get batch operation progress."""
-        return await self._request(
-            "GET", f"/api/tracks/batch/{batch_id}", token=token
-        )
+        return await self._request("GET", f"/api/tracks/batch/{batch_id}", token=token)
 
     async def get_batch_result(self, token: str, batch_id: str) -> dict[str, Any]:
         """Get batch operation result."""
-        return await self._request(
-            "GET", f"/api/tracks/batch/{batch_id}/result", token=token
-        )
+        return await self._request("GET", f"/api/tracks/batch/{batch_id}/result", token=token)
 
 
 api = APIClient()

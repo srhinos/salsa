@@ -23,7 +23,6 @@ import asyncio
 import json
 import os
 import sys
-import time
 import uuid
 import webbrowser
 from datetime import datetime
@@ -77,7 +76,7 @@ async def plex_oauth_flow() -> tuple[str, str, str]:
         auth_url = f"https://app.plex.tv/auth#?clientID={CLIENT_ID}&code={pin_code}&context%5Bdevice%5D%5Bproduct%5D=SALSA"
 
         print(f"\nPIN Code: {pin_code}")
-        print(f"\nOpening browser for Plex login...")
+        print("\nOpening browser for Plex login...")
         print(f"If browser doesn't open, visit: {auth_url}")
 
         webbrowser.open(auth_url)
@@ -248,11 +247,15 @@ class PlexCapture:
 
         combined_path = FIXTURES_DIR / "_all_fixtures.json"
         with open(combined_path, "w") as f:
-            json.dump({
-                "captured_at": datetime.now().isoformat(),
-                "base_url": self.base_url,
-                "fixtures": self.captured,
-            }, f, indent=2)
+            json.dump(
+                {
+                    "captured_at": datetime.now().isoformat(),
+                    "base_url": self.base_url,
+                    "fixtures": self.captured,
+                },
+                f,
+                indent=2,
+            )
         print(f"  Saved: {combined_path.name}")
 
 
@@ -269,7 +272,12 @@ def print_item(label: str, value: str, indent: int = 0):
     print(f"{prefix}{label}: {value}")
 
 
-def select_item(items: list[dict], prompt: str, key_field: str = "ratingKey", title_field: str = "title") -> dict | None:
+def select_item(
+    items: list[dict],
+    prompt: str,
+    key_field: str = "ratingKey",
+    title_field: str = "title",
+) -> dict | None:
     """Let user select an item from a list."""
     if not items:
         print("  No items available!")
@@ -288,7 +296,7 @@ def select_item(items: list[dict], prompt: str, key_field: str = "ratingKey", ti
     while True:
         try:
             choice = input("\nEnter number (or 'q' to quit): ").strip()
-            if choice.lower() == 'q':
+            if choice.lower() == "q":
                 return None
             idx = int(choice) - 1
             if 0 <= idx < len(items):
@@ -315,8 +323,9 @@ def select_stream(streams: list[dict], stream_type: str) -> dict | None:
 
     while True:
         try:
-            choice = input(f"\nSelect {stream_type} stream (or 's' to skip, '0' to disable subs): ").strip()
-            if choice.lower() == 's':
+            prompt = f"\nSelect {stream_type} stream (or 's' to skip, '0' to disable subs): "
+            choice = input(prompt).strip()
+            if choice.lower() == "s":
                 return None
             idx = int(choice)
             if idx == 0 and stream_type == "subtitle":
@@ -352,7 +361,9 @@ async def capture_interactive(capture: PlexCapture):
         lib_type = lib["type"]
 
         print_header(f"Step 3: Library Items - {lib['title']}")
-        items_data = await capture.get(f"/library/sections/{lib_key}/all", f"library_{lib_key}_items")
+        items_data = await capture.get(
+            f"/library/sections/{lib_key}/all", f"library_{lib_key}_items"
+        )
         items = items_data.get("MediaContainer", {}).get("Metadata", [])
 
         if lib_type == "movie":
@@ -365,7 +376,7 @@ async def capture_interactive(capture: PlexCapture):
                 await explore_show(capture, show)
 
         cont = input("\nExplore another library? (y/n): ").strip().lower()
-        if cont != 'y':
+        if cont != "y":
             break
 
 
@@ -377,8 +388,7 @@ async def explore_movie(capture: PlexCapture, movie: dict):
     print_header(f"Movie: {title}")
 
     metadata = await capture.get(
-        f"/library/metadata/{rating_key}?checkFiles=1",
-        f"movie_{rating_key}_metadata"
+        f"/library/metadata/{rating_key}?checkFiles=1", f"movie_{rating_key}_metadata"
     )
 
     item = metadata.get("MediaContainer", {}).get("Metadata", [{}])[0]
@@ -398,7 +408,7 @@ async def explore_movie(capture: PlexCapture, movie: dict):
     if audio and part_id:
         await capture.put(
             f"/library/parts/{part_id}?audioStreamID={audio['id']}&allParts=1",
-            f"movie_{rating_key}_set_audio"
+            f"movie_{rating_key}_set_audio",
         )
         print(f"  ✓ Set audio to stream {audio['id']}")
 
@@ -407,7 +417,7 @@ async def explore_movie(capture: PlexCapture, movie: dict):
         stream_id = 0 if subtitle.get("disable") else subtitle["id"]
         await capture.put(
             f"/library/parts/{part_id}?subtitleStreamID={stream_id}&allParts=1",
-            f"movie_{rating_key}_set_subtitle"
+            f"movie_{rating_key}_set_subtitle",
         )
         print(f"  ✓ Set subtitle to stream {stream_id}")
 
@@ -419,14 +429,10 @@ async def explore_show(capture: PlexCapture, show: dict):
 
     print_header(f"TV Show: {title}")
 
-    await capture.get(
-        f"/library/metadata/{rating_key}",
-        f"show_{rating_key}_metadata"
-    )
+    await capture.get(f"/library/metadata/{rating_key}", f"show_{rating_key}_metadata")
 
     seasons_data = await capture.get(
-        f"/library/metadata/{rating_key}/children",
-        f"show_{rating_key}_seasons"
+        f"/library/metadata/{rating_key}/children", f"show_{rating_key}_seasons"
     )
     seasons = seasons_data.get("MediaContainer", {}).get("Metadata", [])
 
@@ -444,14 +450,10 @@ async def explore_season(capture: PlexCapture, season: dict, show_title: str = "
 
     print_header(f"Season: {show_title} - {title}")
 
-    await capture.get(
-        f"/library/metadata/{rating_key}",
-        f"season_{rating_key}_metadata"
-    )
+    await capture.get(f"/library/metadata/{rating_key}", f"season_{rating_key}_metadata")
 
     episodes_data = await capture.get(
-        f"/library/metadata/{rating_key}/children",
-        f"season_{rating_key}_episodes"
+        f"/library/metadata/{rating_key}/children", f"season_{rating_key}_episodes"
     )
     episodes = episodes_data.get("MediaContainer", {}).get("Metadata", [])
 
@@ -462,7 +464,7 @@ async def explore_season(capture: PlexCapture, season: dict, show_title: str = "
         first_ep_key = first_ep["ratingKey"]
         await capture.get(
             f"/library/metadata/{first_ep_key}?checkFiles=1",
-            f"episode_{first_ep_key}_metadata_sample"
+            f"episode_{first_ep_key}_metadata_sample",
         )
 
     episode = select_item(episodes, "Select an episode:", title_field="title")
@@ -481,8 +483,7 @@ async def explore_episode(capture: PlexCapture, episode: dict):
     print_header(f"Episode {index}: {title}")
 
     metadata = await capture.get(
-        f"/library/metadata/{rating_key}?checkFiles=1",
-        f"episode_{rating_key}_metadata"
+        f"/library/metadata/{rating_key}?checkFiles=1", f"episode_{rating_key}_metadata"
     )
 
     item = metadata.get("MediaContainer", {}).get("Metadata", [{}])[0]
@@ -502,7 +503,7 @@ async def explore_episode(capture: PlexCapture, episode: dict):
     if audio and part_id:
         await capture.put(
             f"/library/parts/{part_id}?audioStreamID={audio['id']}&allParts=1",
-            f"episode_{rating_key}_set_audio"
+            f"episode_{rating_key}_set_audio",
         )
         print(f"  ✓ Set audio to stream {audio['id']}")
 
@@ -511,7 +512,7 @@ async def explore_episode(capture: PlexCapture, episode: dict):
         stream_id = 0 if subtitle.get("disable") else subtitle["id"]
         await capture.put(
             f"/library/parts/{part_id}?subtitleStreamID={stream_id}&allParts=1",
-            f"episode_{rating_key}_set_subtitle"
+            f"episode_{rating_key}_set_subtitle",
         )
         print(f"  ✓ Set subtitle to stream {stream_id}")
 
@@ -534,19 +535,25 @@ async def capture_automatic(capture: PlexCapture):
     if movie_lib:
         lib_key = movie_lib["key"]
         print(f"3. Movie library '{movie_lib['title']}'...")
-        items_data = await capture.get(f"/library/sections/{lib_key}/all", f"library_{lib_key}_movies")
+        items_data = await capture.get(
+            f"/library/sections/{lib_key}/all", f"library_{lib_key}_movies"
+        )
         movies = items_data.get("MediaContainer", {}).get("Metadata", [])
 
         if movies:
             movie = movies[0]
             movie_key = movie["ratingKey"]
             print(f"   - Movie '{movie.get('title')}'...")
-            await capture.get(f"/library/metadata/{movie_key}?checkFiles=1", f"movie_{movie_key}_metadata")
+            await capture.get(
+                f"/library/metadata/{movie_key}?checkFiles=1", f"movie_{movie_key}_metadata"
+            )
 
     if show_lib:
         lib_key = show_lib["key"]
         print(f"4. TV library '{show_lib['title']}'...")
-        items_data = await capture.get(f"/library/sections/{lib_key}/all", f"library_{lib_key}_shows")
+        items_data = await capture.get(
+            f"/library/sections/{lib_key}/all", f"library_{lib_key}_shows"
+        )
         shows = items_data.get("MediaContainer", {}).get("Metadata", [])
 
         if shows:
@@ -555,23 +562,31 @@ async def capture_automatic(capture: PlexCapture):
             print(f"   - Show '{show.get('title')}'...")
             await capture.get(f"/library/metadata/{show_key}", f"show_{show_key}_metadata")
 
-            seasons_data = await capture.get(f"/library/metadata/{show_key}/children", f"show_{show_key}_seasons")
+            seasons_data = await capture.get(
+                f"/library/metadata/{show_key}/children", f"show_{show_key}_seasons"
+            )
             seasons = seasons_data.get("MediaContainer", {}).get("Metadata", [])
 
             if seasons:
                 season = seasons[0]
                 season_key = season["ratingKey"]
                 print(f"   - Season '{season.get('title')}'...")
-                await capture.get(f"/library/metadata/{season_key}", f"season_{season_key}_metadata")
+                await capture.get(
+                    f"/library/metadata/{season_key}", f"season_{season_key}_metadata"
+                )
 
-                episodes_data = await capture.get(f"/library/metadata/{season_key}/children", f"season_{season_key}_episodes")
+                episodes_data = await capture.get(
+                    f"/library/metadata/{season_key}/children", f"season_{season_key}_episodes"
+                )
                 episodes = episodes_data.get("MediaContainer", {}).get("Metadata", [])
 
                 if episodes:
                     episode = episodes[0]
                     ep_key = episode["ratingKey"]
                     print(f"   - Episode '{episode.get('title')}'...")
-                    await capture.get(f"/library/metadata/{ep_key}?checkFiles=1", f"episode_{ep_key}_metadata")
+                    await capture.get(
+                        f"/library/metadata/{ep_key}?checkFiles=1", f"episode_{ep_key}_metadata"
+                    )
 
     print("\n✓ Automatic capture complete!")
 
@@ -579,8 +594,12 @@ async def capture_automatic(capture: PlexCapture):
 async def main():
     parser = argparse.ArgumentParser(description="Capture Plex API responses for test fixtures")
     parser.add_argument("--interactive", "-i", action="store_true", help="Interactive mode")
-    parser.add_argument("--url", default=os.environ.get("PLEX_URL"), help="Server URL (skip server selection)")
-    parser.add_argument("--token", default=os.environ.get("PLEX_TOKEN"), help="Plex token (skip OAuth)")
+    parser.add_argument(
+        "--url", default=os.environ.get("PLEX_URL"), help="Server URL (skip server selection)"
+    )
+    parser.add_argument(
+        "--token", default=os.environ.get("PLEX_TOKEN"), help="Plex token (skip OAuth)"
+    )
     args = parser.parse_args()
 
     token = args.token
@@ -588,9 +607,9 @@ async def main():
 
     try:
         if not token:
-            token, username, email = await plex_oauth_flow()
+            token, _username, _email = await plex_oauth_flow()
         else:
-            print(f"Using provided token...")
+            print("Using provided token...")
 
         if not server_url:
             server_url = await select_server(token)

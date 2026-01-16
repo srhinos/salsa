@@ -30,9 +30,7 @@ def server_select_card() -> rx.Component:
                     align="center",
                     width="100%",
                 ),
-
                 rx.box(height="4px"),
-
                 rx.cond(
                     State.server_selection_error != "",
                     rx.callout(
@@ -42,7 +40,6 @@ def server_select_card() -> rx.Component:
                         size="1",
                     ),
                 ),
-
                 rx.cond(
                     State.is_loading_servers,
                     rx.hstack(
@@ -54,7 +51,6 @@ def server_select_card() -> rx.Component:
                     ),
                     _server_selection_content(),
                 ),
-
                 rx.button(
                     rx.icon("log-out", size=14),
                     "Sign out",
@@ -63,7 +59,6 @@ def server_select_card() -> rx.Component:
                     color_scheme="gray",
                     on_click=State.logout,
                 ),
-
                 spacing="4",
                 align="center",
                 width="100%",
@@ -95,9 +90,7 @@ def _server_selection_content() -> rx.Component:
                 color=rx.color("gray", 11),
             ),
         ),
-
         rx.separator(size="4"),
-
         rx.vstack(
             rx.text("Or enter server URL manually", size="2", color=rx.color("gray", 11)),
             rx.hstack(
@@ -158,7 +151,6 @@ def _server_selection_content() -> rx.Component:
             spacing="2",
             width="100%",
         ),
-
         spacing="4",
         width="100%",
     )

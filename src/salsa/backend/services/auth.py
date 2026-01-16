@@ -86,6 +86,7 @@ class AuthService:
     def _generate_session_id(self, token: str) -> str:
         """Generate a session ID from the token."""
         import hashlib
+
         return hashlib.sha256(f"{token}{self.settings.secret_key}".encode()).hexdigest()[:32]
 
     async def create_pin(self) -> dict[str, Any]:
