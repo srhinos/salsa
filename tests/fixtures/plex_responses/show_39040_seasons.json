@@ -1,0 +1,65 @@
+{
+  "MediaContainer": {
+    "size": 2,
+    "allowSync": true,
+    "identifier": "com.plexapp.plugins.library",
+    "key": "39040",
+    "librarySectionID": 1,
+    "librarySectionTitle": "TV Shows",
+    "librarySectionUUID": "00000000-0000-0000-0000-000000000001",
+    "parentTitle": "Test Anime Series",
+    "parentYear": 2020,
+    "summary": "A synthetic anime series for testing audio/subtitle stream management.",
+    "title1": "TV Shows",
+    "title2": "Test Anime Series",
+    "viewGroup": "season",
+    "Directory": [
+      {
+        "leafCount": 24,
+        "thumb": "/library/metadata/39040/thumb/1",
+        "key": "/library/metadata/39040/allLeaves",
+        "title": "All episodes"
+      }
+    ],
+    "Metadata": [
+      {
+        "ratingKey": "39065",
+        "key": "/library/metadata/39065/children",
+        "parentRatingKey": "39040",
+        "guid": "plex://season/0000000000000000000001",
+        "parentGuid": "plex://show/0000000000000000000001",
+        "type": "season",
+        "title": "Season 1",
+        "parentKey": "/library/metadata/39040",
+        "parentTitle": "Test Anime Series",
+        "summary": "",
+        "index": 1,
+        "parentIndex": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/39065/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "parentThumb": "/library/metadata/39040/thumb/1",
+        "leafCount": 12
+      },
+      {
+        "ratingKey": "39041",
+        "key": "/library/metadata/39041/children",
+        "parentRatingKey": "39040",
+        "guid": "plex://season/0000000000000000000002",
+        "parentGuid": "plex://show/0000000000000000000001",
+        "type": "season",
+        "title": "Season 2",
+        "parentKey": "/library/metadata/39040",
+        "parentTitle": "Test Anime Series",
+        "summary": "",
+        "index": 2,
+        "parentIndex": 1,
+        "parentYear": 2020,
+        "thumb": "/library/metadata/39041/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "parentThumb": "/library/metadata/39040/thumb/1",
+        "leafCount": 12
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+[project]
+name = "salsa"
+version = "0.1.0"
+description = "Subtitle And Language Stream Automation - Plex audio/subtitle track management"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.128.0",
+    "uvicorn[standard]>=0.40.0",
+    "httpx>=0.28.1",
+    "reflex>=0.8.25",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+    "python-multipart>=0.0.21",
+    "cryptography>=46.0.3",
+    "loguru>=0.7.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "respx>=0.22.0",
+]
+
+[project.urls]
+Repository = "https://github.com/srhinos/salsa"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/salsa"]
+
+[tool.hatch.build.targets.editable]
+dev-mode-dirs = ["src"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "respx>=0.22.0",
+    "ruff>=0.14.13",
+    "ty>=0.0.12",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "F",     # pyflakes
+    "I",     # isort
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "SIM",   # flake8-simplify
+    "ASYNC", # flake8-async
+    "RUF",   # ruff-specific
+]
+ignore = [
+    "B904",     # Allow raise without from in HTTP exception handlers
+    "RUF012",   # Mutable class attributes - required for Reflex state
+    "E741",     # Ambiguous variable name - allow in comprehensions
+    "ASYNC109", # timeout parameter in async functions - common pattern
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/salsa/frontend/**/*.py" = ["E501"] # Allow long lines in frontend
+"tests/**/*.py" = ["E501"]              # Allow long lines in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["salsa"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.coverage.run]
+source = ["src/salsa"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]

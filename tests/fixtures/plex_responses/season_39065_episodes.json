@@ -1,0 +1,171 @@
+{
+  "MediaContainer": {
+    "size": 3,
+    "allowSync": true,
+    "art": "/library/metadata/39040/art/1",
+    "grandparentRatingKey": 39040,
+    "grandparentThumb": "/library/metadata/39040/thumb/1",
+    "grandparentTitle": "Test Anime Series",
+    "identifier": "com.plexapp.plugins.library",
+    "key": "39065",
+    "librarySectionID": 1,
+    "librarySectionTitle": "TV Shows",
+    "librarySectionUUID": "00000000-0000-0000-0000-000000000001",
+    "parentIndex": 1,
+    "parentTitle": "Season 1",
+    "parentYear": 2020,
+    "thumb": "/library/metadata/39065/thumb/1",
+    "title1": "Test Anime Series",
+    "title2": "Season 1",
+    "viewGroup": "episode",
+    "Metadata": [
+      {
+        "ratingKey": "39066",
+        "key": "/library/metadata/39066",
+        "parentRatingKey": "39065",
+        "grandparentRatingKey": "39040",
+        "guid": "plex://episode/0000000000000000000001",
+        "parentGuid": "plex://season/0000000000000000000001",
+        "grandparentGuid": "plex://show/0000000000000000000001",
+        "type": "episode",
+        "title": "Test Episode One",
+        "grandparentKey": "/library/metadata/39040",
+        "parentKey": "/library/metadata/39065",
+        "grandparentTitle": "Test Anime Series",
+        "parentTitle": "Season 1",
+        "summary": "First episode for testing stream management.",
+        "index": 1,
+        "parentIndex": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/39066/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "parentThumb": "/library/metadata/39065/thumb/1",
+        "grandparentThumb": "/library/metadata/39040/thumb/1",
+        "duration": 1440000,
+        "Media": [
+          {
+            "id": 60033,
+            "duration": 1440000,
+            "bitrate": 8000,
+            "width": 1920,
+            "height": 1080,
+            "aspectRatio": 1.78,
+            "audioChannels": 2,
+            "audioCodec": "eac3",
+            "videoCodec": "hevc",
+            "videoResolution": "1080",
+            "container": "mkv",
+            "Part": [
+              {
+                "id": 60039,
+                "key": "/library/parts/60039/1/file.mkv",
+                "duration": 1440000,
+                "file": "/media/tv/Test Anime Series (2020)/Season 01/Test Anime Series - S01E01.mkv",
+                "size": 1400000000,
+                "container": "mkv"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ratingKey": "39067",
+        "key": "/library/metadata/39067",
+        "parentRatingKey": "39065",
+        "grandparentRatingKey": "39040",
+        "guid": "plex://episode/0000000000000000000002",
+        "parentGuid": "plex://season/0000000000000000000001",
+        "grandparentGuid": "plex://show/0000000000000000000001",
+        "type": "episode",
+        "title": "Test Episode Two",
+        "grandparentKey": "/library/metadata/39040",
+        "parentKey": "/library/metadata/39065",
+        "grandparentTitle": "Test Anime Series",
+        "parentTitle": "Season 1",
+        "summary": "Second episode for testing stream management.",
+        "index": 2,
+        "parentIndex": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/39067/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "parentThumb": "/library/metadata/39065/thumb/1",
+        "grandparentThumb": "/library/metadata/39040/thumb/1",
+        "duration": 1440000,
+        "Media": [
+          {
+            "id": 60034,
+            "duration": 1440000,
+            "bitrate": 8000,
+            "width": 1920,
+            "height": 1080,
+            "aspectRatio": 1.78,
+            "audioChannels": 2,
+            "audioCodec": "eac3",
+            "videoCodec": "hevc",
+            "videoResolution": "1080",
+            "container": "mkv",
+            "Part": [
+              {
+                "id": 60040,
+                "key": "/library/parts/60040/1/file.mkv",
+                "duration": 1440000,
+                "file": "/media/tv/Test Anime Series (2020)/Season 01/Test Anime Series - S01E02.mkv",
+                "size": 1400000000,
+                "container": "mkv"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ratingKey": "39068",
+        "key": "/library/metadata/39068",
+        "parentRatingKey": "39065",
+        "grandparentRatingKey": "39040",
+        "guid": "plex://episode/0000000000000000000003",
+        "parentGuid": "plex://season/0000000000000000000001",
+        "grandparentGuid": "plex://show/0000000000000000000001",
+        "type": "episode",
+        "title": "Test Episode Three",
+        "grandparentKey": "/library/metadata/39040",
+        "parentKey": "/library/metadata/39065",
+        "grandparentTitle": "Test Anime Series",
+        "parentTitle": "Season 1",
+        "summary": "Third episode for testing stream management.",
+        "index": 3,
+        "parentIndex": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/39068/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "parentThumb": "/library/metadata/39065/thumb/1",
+        "grandparentThumb": "/library/metadata/39040/thumb/1",
+        "duration": 1440000,
+        "Media": [
+          {
+            "id": 60035,
+            "duration": 1440000,
+            "bitrate": 8000,
+            "width": 1920,
+            "height": 1080,
+            "aspectRatio": 1.78,
+            "audioChannels": 2,
+            "audioCodec": "eac3",
+            "videoCodec": "hevc",
+            "videoResolution": "1080",
+            "container": "mkv",
+            "Part": [
+              {
+                "id": 60041,
+                "key": "/library/parts/60041/1/file.mkv",
+                "duration": 1440000,
+                "file": "/media/tv/Test Anime Series (2020)/Season 01/Test Anime Series - S01E03.mkv",
+                "size": 1400000000,
+                "container": "mkv"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

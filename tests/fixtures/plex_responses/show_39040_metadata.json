@@ -1,0 +1,31 @@
+{
+  "MediaContainer": {
+    "size": 1,
+    "allowSync": true,
+    "identifier": "com.plexapp.plugins.library",
+    "librarySectionID": 1,
+    "librarySectionTitle": "TV Shows",
+    "librarySectionUUID": "00000000-0000-0000-0000-000000000001",
+    "Metadata": [
+      {
+        "ratingKey": "39040",
+        "key": "/library/metadata/39040/children",
+        "guid": "plex://show/0000000000000000000001",
+        "type": "show",
+        "title": "Test Anime Series",
+        "librarySectionTitle": "TV Shows",
+        "librarySectionID": 1,
+        "librarySectionKey": "/library/sections/1",
+        "summary": "A synthetic anime series for testing audio/subtitle stream management.",
+        "index": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/39040/thumb/1",
+        "art": "/library/metadata/39040/art/1",
+        "leafCount": 24,
+        "childCount": 2,
+        "Genre": [{"tag": "Animation"}, {"tag": "Action"}],
+        "Country": [{"tag": "Japan"}]
+      }
+    ]
+  }
+}

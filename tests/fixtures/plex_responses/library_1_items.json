@@ -1,0 +1,63 @@
+{
+  "MediaContainer": {
+    "size": 3,
+    "allowSync": true,
+    "identifier": "com.plexapp.plugins.library",
+    "librarySectionID": 1,
+    "librarySectionTitle": "TV Shows",
+    "librarySectionUUID": "00000000-0000-0000-0000-000000000001",
+    "title1": "TV Shows",
+    "title2": "All Shows",
+    "viewGroup": "show",
+    "Metadata": [
+      {
+        "ratingKey": "1001",
+        "key": "/library/metadata/1001/children",
+        "guid": "plex://show/0000000000000000000001",
+        "type": "show",
+        "title": "Test Anime Show",
+        "summary": "A synthetic test show for unit testing.",
+        "index": 1,
+        "year": 2020,
+        "thumb": "/library/metadata/1001/thumb/1",
+        "art": "/library/metadata/1001/art/1",
+        "leafCount": 24,
+        "childCount": 2,
+        "Genre": [{"tag": "Animation"}, {"tag": "Action"}],
+        "Country": [{"tag": "Japan"}]
+      },
+      {
+        "ratingKey": "1002",
+        "key": "/library/metadata/1002/children",
+        "guid": "plex://show/0000000000000000000002",
+        "type": "show",
+        "title": "Test Drama Series",
+        "summary": "A synthetic drama series for testing.",
+        "index": 1,
+        "year": 2019,
+        "thumb": "/library/metadata/1002/thumb/1",
+        "art": "/library/metadata/1002/art/1",
+        "leafCount": 50,
+        "childCount": 5,
+        "Genre": [{"tag": "Drama"}],
+        "Country": [{"tag": "United States of America"}]
+      },
+      {
+        "ratingKey": "1003",
+        "key": "/library/metadata/1003/children",
+        "guid": "plex://show/0000000000000000000003",
+        "type": "show",
+        "title": "Test Comedy Show",
+        "summary": "A synthetic comedy for testing filters.",
+        "index": 1,
+        "year": 2015,
+        "thumb": "/library/metadata/1003/thumb/1",
+        "art": "/library/metadata/1003/art/1",
+        "leafCount": 100,
+        "childCount": 5,
+        "Genre": [{"tag": "Comedy"}],
+        "Country": [{"tag": "United Kingdom"}]
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+services:
+  salsa:
+    build: .
+    container_name: salsa
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - MODE=${MODE:-prod}
+      - SALSA_PLEX_HOST=${PLEX_HOST:-plex}
+      - SALSA_PLEX_PORT=${PLEX_PORT:-32400}
+      - SALSA_PLEX_PROTOCOL=${PLEX_PROTOCOL:-http}
+      - SALSA_BACKEND_URL=${BACKEND_URL:-http://localhost:8001}
+      - SALSA_API_URL=${API_URL:-http://localhost:8000}
+      - SALSA_SECRET_KEY=${SECRET_KEY:-}
+    volumes:
+      - /app/.venv
+
+      - /app/.web
+    networks:
+      - plex_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    profiles:
+      - prod
+
+  salsa-dev:
+    build: .
+    container_name: salsa-dev
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - MODE=dev
+      - SALSA_PLEX_HOST=${PLEX_HOST:-host.docker.internal}
+      - SALSA_PLEX_PORT=${PLEX_PORT:-32400}
+      - SALSA_PLEX_PROTOCOL=${PLEX_PROTOCOL:-http}
+      - SALSA_BACKEND_URL=${BACKEND_URL:-http://localhost:8001}
+      - SALSA_API_URL=${API_URL:-http://localhost:8000}
+    volumes:
+      - ./src:/app/src
+      - ./rxconfig.py:/app/rxconfig.py
+      - ./assets:/app/assets
+      - /app/.venv
+      - /app/.web
+    networks:
+      - plex_network
+    profiles:
+      - dev
+
+networks:
+  plex_network:
+    driver: bridge
