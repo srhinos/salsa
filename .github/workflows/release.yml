@@ -1,7 +1,9 @@
 name: Release
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
 
 permissions:
@@ -11,6 +13,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -23,7 +26,6 @@ jobs:
           VERSION=$(grep -m1 'version = ' pyproject.toml | cut -d'"' -f2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          # Check if this version tag already exists
           if git rev-parse "v$VERSION" >/dev/null 2>&1; then
             echo "is_new_version=false" >> $GITHUB_OUTPUT
           else
@@ -60,9 +62,9 @@ jobs:
           tag_name: dev
           name: Development Build
           body: |
-            ⚠️ **This is a development build** - automatically updated on each push to main.
+            ⚠️ **Development build** - updated on each push to main.
 
-            Based on version `${{ steps.version.outputs.version }}` + latest commits.
+            Based on `${{ steps.version.outputs.version }}` + latest commits.
 
             ## Recent Changes
             ${{ steps.changelog.outputs.changelog }}
