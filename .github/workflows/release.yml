@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get version from pyproject.toml
+        id: version
+        run: |
+          VERSION=$(grep -m1 'version = ' pyproject.toml | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Check if this version tag already exists
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "is_new_version=false" >> $GITHUB_OUTPUT
+          else
+            echo "is_new_version=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s" $PREV_TAG..HEAD)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s" | head -20)
+          fi
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Delete existing dev release
+        if: steps.version.outputs.is_new_version == 'false'
+        run: gh release delete dev --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete existing dev tag
+        if: steps.version.outputs.is_new_version == 'false'
+        run: git push origin :refs/tags/dev || true
+
+      - name: Create dev pre-release
+        if: steps.version.outputs.is_new_version == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dev
+          name: Development Build
+          body: |
+            ⚠️ **This is a development build** - automatically updated on each push to main.
+
+            Based on version `${{ steps.version.outputs.version }}` + latest commits.
+
+            ## Recent Changes
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## Docker
+            ```bash
+            docker pull ghcr.io/${{ github.repository }}:dev
+            ```
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create versioned release
+        if: steps.version.outputs.is_new_version == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body: |
+            ## What's Changed
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## Docker
+            ```bash
+            docker pull ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+            ```
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
