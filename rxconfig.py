@@ -10,4 +10,5 @@ config = rx.Config(
     app_name="salsa",
     app_module_import="salsa.frontend.app",
     api_url=settings.api_url,
+    show_built_with_reflex=False,
 )
